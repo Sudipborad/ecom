@@ -18,6 +18,8 @@ if(isset($_POST['add_product'])){
    $price = filter_var($price, FILTER_SANITIZE_STRING);
    $details = $_POST['details'];
    $details = filter_var($details, FILTER_SANITIZE_STRING);
+   $category_id = $_POST['category_id'];
+   $category_id = filter_var($category_id, FILTER_SANITIZE_STRING);
 
    $image_01 = $_FILES['image_01']['name'];
    $image_01 = filter_var($image_01, FILTER_SANITIZE_STRING);
@@ -44,8 +46,8 @@ if(isset($_POST['add_product'])){
       $message[] = 'Product name already exists!';
    }else{
 
-      $insert_products = $conn->prepare("INSERT INTO `products`(name, details, price, image_01, image_02, image_03) VALUES(?,?,?,?,?,?)");
-      $insert_products->execute([$name, $details, $price, $image_01, $image_02, $image_03]);
+      $insert_products = $conn->prepare("INSERT INTO `products`(name, details, price, category_id, image_01, image_02, image_03) VALUES(?,?,?,?,?,?,?)");
+      $insert_products->execute([$name, $details, $price, $category_id, $image_01, $image_02, $image_03]);
 
       if($insert_products){
          if($image_size_01 > 2000000 OR $image_size_02 > 2000000 OR $image_size_03 > 2000000){
@@ -114,6 +116,19 @@ if(isset($_GET['delete'])){
          <div class="inputBox">
             <span>product price (required)</span>
             <input type="number" min="0" class="box" required max="9999999999" placeholder="enter product price" onkeypress="if(this.value.length == 10) return false;" name="price">
+         </div>
+         <div class="inputBox">
+            <span>product category (required)</span>
+            <select name="category_id" class="box" required>
+               <option value="">Select category</option>
+               <?php
+                  $select_categories = $conn->prepare("SELECT * FROM `categories`");
+                  $select_categories->execute();
+                  while($fetch_category = $select_categories->fetch(PDO::FETCH_ASSOC)){
+               ?>
+               <option value="<?= $fetch_category['id']; ?>"><?= ucfirst($fetch_category['name']); ?></option>
+               <?php } ?>
+            </select>
          </div>
         <div class="inputBox">
             <span>image 01 (required)</span>

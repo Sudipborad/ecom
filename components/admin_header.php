@@ -18,13 +18,14 @@
       <a href="../admin/dashboard.php" class="logo">Admin<span>Panel</span></a>
 
       <nav class="navbar">
-         <a href="../admin/dashboard.php">Home</a>
-         <a href="../admin/products.php">Products</a>
-         <a href="../admin/placed_orders.php">Orders</a>
-         <a href="../admin/admin_accounts.php">Admins</a>
-         <a href="../admin/users_accounts.php">Users</a>
-         <a href="../admin/messages.php">Messages</a>
-         <a href="../home.php">User Panel</a>
+         <a href="../admin/dashboard.php" <?= (basename($_SERVER['PHP_SELF']) == 'dashboard.php') ? 'class="active"' : ''; ?>>Home</a>
+         <a href="../admin/products.php" <?= (basename($_SERVER['PHP_SELF']) == 'products.php') ? 'class="active"' : ''; ?>>Products</a>
+         <a href="../admin/categories.php" <?= (basename($_SERVER['PHP_SELF']) == 'categories.php') ? 'class="active"' : ''; ?>>Categories</a>
+         <a href="../admin/placed_orders.php" <?= (basename($_SERVER['PHP_SELF']) == 'placed_orders.php') ? 'class="active"' : ''; ?>>Orders</a>
+         <a href="../admin/admin_accounts.php" <?= (basename($_SERVER['PHP_SELF']) == 'admin_accounts.php') ? 'class="active"' : ''; ?>>Admins</a>
+         <a href="../admin/users_accounts.php" <?= (basename($_SERVER['PHP_SELF']) == 'users_accounts.php') ? 'class="active"' : ''; ?>>Users</a>
+         <a href="../admin/messages.php" <?= (basename($_SERVER['PHP_SELF']) == 'messages.php') ? 'class="active"' : ''; ?>>Messages</a>
+         <a href="../home.php" class="user-panel-link">User Panel</a>
       </nav>
 
       <div class="icons">

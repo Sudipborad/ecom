@@ -19,9 +19,11 @@ if(isset($_POST['update'])){
    $price = filter_var($price, FILTER_SANITIZE_STRING);
    $details = $_POST['details'];
    $details = filter_var($details, FILTER_SANITIZE_STRING);
+   $category_id = $_POST['category_id'];
+   $category_id = filter_var($category_id, FILTER_SANITIZE_STRING);
 
-   $update_product = $conn->prepare("UPDATE `products` SET name = ?, price = ?, details = ? WHERE id = ?");
-   $update_product->execute([$name, $price, $details, $pid]);
+   $update_product = $conn->prepare("UPDATE `products` SET name = ?, price = ?, details = ?, category_id = ? WHERE id = ?");
+   $update_product->execute([$name, $price, $details, $category_id, $pid]);
 
    $message[] = 'Product updated successfully!';
 
@@ -133,6 +135,18 @@ if(isset($_POST['update'])){
       <input type="text" name="name" required class="box" maxlength="100" placeholder="enter product name" value="<?= $fetch_products['name']; ?>">
       <span>update price</span>
       <input type="number" name="price" required class="box" min="0" max="9999999999" placeholder="enter product price" onkeypress="if(this.value.length == 10) return false;" value="<?= $fetch_products['price']; ?>">
+      <span>update category</span>
+      <select name="category_id" class="box" required>
+         <option value="">Select category</option>
+         <?php
+            $select_categories = $conn->prepare("SELECT * FROM `categories`");
+            $select_categories->execute();
+            while($fetch_category = $select_categories->fetch(PDO::FETCH_ASSOC)){
+               $selected = ($fetch_category['id'] == $fetch_products['category_id']) ? 'selected' : '';
+         ?>
+         <option value="<?= $fetch_category['id']; ?>" <?= $selected; ?>><?= ucfirst($fetch_category['name']); ?></option>
+         <?php } ?>
+      </select>
       <span>update details</span>
       <textarea name="details" class="box" required cols="30" rows="10"><?= $fetch_products['details']; ?></textarea>
       <span>update image 01</span>

@@ -79,6 +79,8 @@ include 'components/wishlist_cart.php';
    </div>
 
       <div class="swiper-pagination"></div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
 
    </div>
 
@@ -94,49 +96,67 @@ include 'components/wishlist_cart.php';
 
    <div class="swiper-wrapper">
 
+   <?php
+      $select_categories = $conn->prepare("SELECT * FROM `categories` ORDER BY name ASC");
+      $select_categories->execute();
+      if($select_categories->rowCount() > 0){
+         while($fetch_category = $select_categories->fetch(PDO::FETCH_ASSOC)){
+   ?>
+   <a href="category.php?category=<?= $fetch_category['name']; ?>" class="swiper-slide slide">
+      <img src="images/<?= $fetch_category['image']; ?>" alt="">
+      <h3><?= ucfirst($fetch_category['name']); ?></h3>
+   </a>
+   <?php
+         }
+      }else{
+         // Fallback to static categories if database is not updated yet
+   ?>
    <a href="category.php?category=laptop" class="swiper-slide slide">
       <img src="images/icon-1.png" alt="">
-      <h3>laptop</h3>
+      <h3>Laptop</h3>
    </a>
 
    <a href="category.php?category=tv" class="swiper-slide slide">
       <img src="images/icon-2.png" alt="">
-      <h3>tv</h3>
+      <h3>Tv's</h3>
    </a>
 
    <a href="category.php?category=camera" class="swiper-slide slide">
       <img src="images/icon-3.png" alt="">
-      <h3>camera</h3>
+      <h3>Camera</h3>
    </a>
 
    <a href="category.php?category=mouse" class="swiper-slide slide">
       <img src="images/icon-4.png" alt="">
-      <h3>mouse</h3>
+      <h3>Mouse</h3>
    </a>
 
    <a href="category.php?category=fridge" class="swiper-slide slide">
       <img src="images/icon-5.png" alt="">
-      <h3>fridge</h3>
+      <h3>Fridge</h3>
    </a>
 
    <a href="category.php?category=washing" class="swiper-slide slide">
       <img src="images/icon-6.png" alt="">
-      <h3>washing machine</h3>
+      <h3>Washing machine</h3>
    </a>
 
    <a href="category.php?category=smartphone" class="swiper-slide slide">
       <img src="images/icon-7.png" alt="">
-      <h3>smartphone</h3>
+      <h3>Smartphone</h3>
    </a>
 
    <a href="category.php?category=watch" class="swiper-slide slide">
       <img src="images/icon-8.png" alt="">
-      <h3>watch</h3>
+      <h3>Watch</h3>
    </a>
+   <?php } ?>
 
    </div>
 
    <div class="swiper-pagination"></div>
+   <div class="swiper-button-next"></div>
+   <div class="swiper-button-prev"></div>
 
    </div>
 
@@ -144,7 +164,7 @@ include 'components/wishlist_cart.php';
 
 <section class="home-products">
 
-   <h1 class="heading">latest products</h1>
+   <h1 class="heading">Latest Products</h1>
 
    <div class="swiper products-slider">
 
@@ -202,21 +222,37 @@ include 'components/wishlist_cart.php';
 
 <script>
 
-/*var swiper = new Swiper(".home-slider", {
+var homeSwiper = new Swiper(".home-slider", {
    loop:true,
    spaceBetween: 20,
+   autoplay: {
+      delay: 7500,
+      disableOnInteraction: false,
+   },
    pagination: {
       el: ".swiper-pagination",
       clickable:true,
     },
+   navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+   },
 });
 
- var swiper = new Swiper(".category-slider", {
+ var categorySwiper = new Swiper(".category-slider", {
    loop:true,
    spaceBetween: 20,
+   autoplay: {
+      delay: 7500,
+      disableOnInteraction: false,
+   },
    pagination: {
       el: ".swiper-pagination",
       clickable:true,
+   },
+   navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
    },
    breakpoints: {
       0: {
@@ -234,7 +270,7 @@ include 'components/wishlist_cart.php';
    },
 });
 
-var swiper = new Swiper(".products-slider", {
+var productsSwiper = new Swiper(".products-slider", {
    loop:true,
    spaceBetween: 20,
    pagination: {
@@ -253,7 +289,6 @@ var swiper = new Swiper(".products-slider", {
       },
    },
 });
-*/
 </script>
 
 </body>

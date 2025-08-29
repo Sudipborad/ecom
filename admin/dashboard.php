@@ -128,6 +128,17 @@ if(!isset($admin_id)){
          <a href="messages.php" class="btn">See Messages</a>
       </div>
 
+      <div class="box">
+         <?php
+            $select_categories = $conn->prepare("SELECT * FROM `categories`");
+            $select_categories->execute();
+            $number_of_categories = $select_categories->rowCount()
+         ?>
+         <h3><?= $number_of_categories; ?></h3>
+         <p>Product Categories</p>
+         <a href="categories.php" class="btn">See Categories</a>
+      </div>
+
    </div>
 
 </section>
