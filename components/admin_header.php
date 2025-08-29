@@ -24,6 +24,7 @@
          <a href="../admin/admin_accounts.php">Admins</a>
          <a href="../admin/users_accounts.php">Users</a>
          <a href="../admin/messages.php">Messages</a>
+         <a href="../home.php">User Panel</a>
       </nav>
 
       <div class="icons">
