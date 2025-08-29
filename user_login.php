@@ -4,8 +4,16 @@ include 'components/connect.php';
 
 session_start();
 
+// Clear admin session if exists (prevent simultaneous sessions)
+if(isset($_SESSION['admin_id'])){
+   unset($_SESSION['admin_id']);
+}
+
+// If user is already logged in, redirect to home
 if(isset($_SESSION['user_id'])){
    $user_id = $_SESSION['user_id'];
+   header('location:home.php');
+   exit();
 }else{
    $user_id = '';
 };
@@ -22,6 +30,10 @@ if(isset($_POST['submit'])){
    $row = $select_user->fetch(PDO::FETCH_ASSOC);
 
    if($select_user->rowCount() > 0){
+      // Clear any existing admin session when user logs in
+      if(isset($_SESSION['admin_id'])){
+         unset($_SESSION['admin_id']);
+      }
       $_SESSION['user_id'] = $row['id'];
       header('location:home.php');
    }else{

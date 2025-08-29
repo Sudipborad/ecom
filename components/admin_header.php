@@ -25,7 +25,7 @@
          <a href="../admin/admin_accounts.php" <?= (basename($_SERVER['PHP_SELF']) == 'admin_accounts.php') ? 'class="active"' : ''; ?>>Admins</a>
          <a href="../admin/users_accounts.php" <?= (basename($_SERVER['PHP_SELF']) == 'users_accounts.php') ? 'class="active"' : ''; ?>>Users</a>
          <a href="../admin/messages.php" <?= (basename($_SERVER['PHP_SELF']) == 'messages.php') ? 'class="active"' : ''; ?>>Messages</a>
-         <a href="../home.php" class="user-panel-link">User Panel</a>
+         <a href="../components/clear_admin_session.php" class="user-panel-link">User Panel</a>
       </nav>
 
       <div class="icons">

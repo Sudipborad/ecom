@@ -16,7 +16,7 @@ if(isset($_POST['update_payment'])){
    $payment_status = filter_var($payment_status, FILTER_SANITIZE_STRING);
    $update_payment = $conn->prepare("UPDATE `orders` SET payment_status = ? WHERE id = ?");
    $update_payment->execute([$payment_status, $order_id]);
-   $message[] = 'payment status updated!';
+   $message[] = 'Payment status updated successfully!';
 }
 
 if(isset($_GET['delete'])){
@@ -64,16 +64,17 @@ if(isset($_GET['delete'])){
       <p>Address: <span><?= $fetch_orders['address']; ?></span></p>
       <p>Total Products: <span><?= $fetch_orders['total_products']; ?></span></p>
       <p>Total Price: <span>Rs<?= $fetch_orders['total_price']; ?>/-</span></p>
-      <p>Payment Method: <span><?= $fetch_orders['method']; ?></span></p>
+      <p>Payment Method: <span><?= ucfirst($fetch_orders['method']); ?></span></p>
+      <p>Payment Status: <span class="status <?= $fetch_orders['payment_status']; ?>"><?= ucfirst($fetch_orders['payment_status']); ?></span></p>
       <form action="" method="post">
          <input type="hidden" name="order_id" value="<?= $fetch_orders['id']; ?>">
          <select name="payment_status" class="select">
-            <option selected disabled><?= $fetch_orders['payment_status']; ?></option>
-            <option value="pending">Pending</option>
-            <option value="completed">Completed</option>
+            <option value="">Update Payment Status</option>
+            <option value="pending" <?= $fetch_orders['payment_status'] == 'pending' ? 'selected' : ''; ?>>Pending</option>
+            <option value="completed" <?= $fetch_orders['payment_status'] == 'completed' ? 'selected' : ''; ?>>Completed</option>
          </select>
         <div class="flex-btn">
-         <input type="submit" value="Update" class="option-btn" name="update_payment">
+         <input type="submit" value="Update Status" class="option-btn" name="update_payment">
          <a href="placed_orders.php?delete=<?= $fetch_orders['id']; ?>" class="delete-btn" onclick="return confirm('Delete this order?');">Delete</a>
         </div>
       </form>
@@ -81,7 +82,7 @@ if(isset($_GET['delete'])){
    <?php
          }
       }else{
-         echo '<p class="empty">No orders placed yet!</p>';
+         echo '<p class="empty">No Orders Placed Yet!</p>';
       }
    ?>
 

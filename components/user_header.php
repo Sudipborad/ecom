@@ -23,7 +23,7 @@
          <a href="orders.php">Orders</a>
          <a href="shop.php">Shop</a>
          <a href="contact.php">Contact</a>
-         <a href="admin/admin_login.php">Admin</a>
+         <a href="components/clear_user_session.php">Admin</a>
       </nav>
 
       <div class="icons">

@@ -4,23 +4,60 @@ include '../components/connect.php';
 
 session_start();
 
+// Clear user session if exists (prevent simultaneous sessions)
+if(isset($_SESSION['user_id'])){
+   unset($_SESSION['user_id']);
+}
+
+// If admin is already logged in, redirect to dashboard
+if(isset($_SESSION['admin_id'])){
+   header('location:dashboard.php');
+   exit();
+}
+
 if(isset($_POST['submit'])){
 
    $name = $_POST['name'];
    $name = filter_var($name, FILTER_SANITIZE_STRING);
-   // $pass = sha1($_POST['pass']);
    $pass = $_POST['pass'];
-
    $pass = filter_var($pass, FILTER_SANITIZE_STRING);
 
-   $select_admin = $conn->prepare("SELECT * FROM `admins` WHERE name = ? AND password = ?");
-   $select_admin->execute([$name, $pass]);
+   // First get the admin by username only
+   $select_admin = $conn->prepare("SELECT * FROM `admins` WHERE name = ?");
+   $select_admin->execute([$name]);
    $row = $select_admin->fetch(PDO::FETCH_ASSOC);
 
    if($select_admin->rowCount() > 0){
-      $_SESSION['admin_id'] = $row['id'];
-      header('location:dashboard.php');
-   }else{
+      $password_verified = false;
+      
+      // Check if password is already in new format (starts with $2y$)
+      if(strpos($row['password'], '$2y$') === 0) {
+         // New secure hash - use password_verify
+         $password_verified = password_verify($pass, $row['password']);
+      } else {
+         // Old format - check both SHA1 and plain text for backward compatibility
+         $sha1_pass = sha1($pass);
+         if($row['password'] === $sha1_pass || $row['password'] === $pass) {
+            $password_verified = true;
+            
+            // Automatically upgrade to new secure hash
+            $new_hash = password_hash($pass, PASSWORD_DEFAULT);
+            $update_password = $conn->prepare("UPDATE `admins` SET password = ? WHERE id = ?");
+            $update_password->execute([$new_hash, $row['id']]);
+         }
+      }
+      
+      if($password_verified) {
+         // Clear any existing user session when admin logs in
+         if(isset($_SESSION['user_id'])){
+            unset($_SESSION['user_id']);
+         }
+         $_SESSION['admin_id'] = $row['id'];
+         header('location:dashboard.php');
+      } else {
+         $message[] = 'Incorrect username or password!';
+      }
+   } else {
       $message[] = 'Incorrect username or password!';
    }
 

@@ -4,6 +4,11 @@ include '../components/connect.php';
 
 session_start();
 
+// Clear user session if exists (prevent simultaneous sessions)
+if(isset($_SESSION['user_id'])){
+   unset($_SESSION['user_id']);
+}
+
 $admin_id = $_SESSION['admin_id'];
 
 if(!isset($admin_id)){
